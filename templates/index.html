@@ -1,0 +1,34 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>{% trans "Home page" %}</title>
+	</head>
+	<body>
+		<h1>{% trans "Welcome to this page" %}
+		
+		<!-- <a href="/uz/">O'zbekcha</a>
+		<a href="/en/">English</a> -->
+
+		<form action="{% url 'set_language' %}" method="post" id="language_change_form">
+  {% csrf_token %}
+	<input type="hidden" name="next" value="/">
+	<select name="language" id="language_change_select">
+    {% get_current_language as LANGUAGE_CODE %}
+    {% get_available_languages as LANGUAGES %}
+    {% get_language_info_list for LANGUAGES as languages %}
+    {% for language in languages %}
+		<option value="{{ language.code }}" {% if language.code == LANGUAGE_CODE %}selected{% endif %}>
+      {{ language.code }}
+    </option>
+    {% endfor %}
+  </select>
+
+	<script>
+		document.getElementById('language_change_select').addEventListener("change", () => {
+			document.getElementById('language_change_form').submit();
+		});
+	</script>
+</form>
+	</body>
+</html>
